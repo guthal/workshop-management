@@ -1,0 +1,273 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
+import { WorkshopService } from '@/services/workshops';
+import { Workshop } from '@/types';
+import { Navbar } from '@/components/layout/navbar';
+import { Button } from '@/components/ui/button';
+import { formatDate, formatCurrency } from '@/lib/utils';
+import { ApplicationForm } from '@/components/student/application-form';
+import Link from 'next/link';
+import {
+  MapPin,
+  Calendar,
+  Users,
+  Clock,
+  ArrowLeft,
+  CheckCircle
+} from 'lucide-react';
+
+const workshopService = new WorkshopService();
+
+export default function WorkshopDetailPage() {
+  const { user } = useAuthStore();
+  const params = useParams();
+  const router = useRouter();
+  const [workshop, setWorkshop] = useState<Workshop | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+
+  const workshopId = params.id as string;
+
+  useEffect(() => {
+    const fetchWorkshop = async () => {
+      if (!workshopId) return;
+
+      try {
+        const workshopData = await workshopService.getWorkshop(workshopId);
+
+        // Only show published workshops to students
+        if (workshopData.status !== 'published') {
+          router.push('/workshops');
+          return;
+        }
+
+        setWorkshop(workshopData);
+      } catch (error) {
+        console.error('Failed to fetch workshop:', error);
+        router.push('/workshops');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorkshop();
+  }, [workshopId, router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 sm:px-0">
+            <div className="text-center">Loading workshop details...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!workshop) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 sm:px-0">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900">Workshop not found</h2>
+              <p className="mt-2 text-gray-600">This workshop may not be available or published.</p>
+              <Link href="/workshops">
+                <Button className="mt-4">← Back to Workshops</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+
+      <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          {/* Back Navigation */}
+          <div className="mb-6">
+            <Link href="/workshops">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Workshops
+              </Button>
+            </Link>
+          </div>
+
+          {/* Workshop Header */}
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
+            {/* Workshop Image */}
+            {workshop.imageUrl && (
+              <div className="w-full h-64 md:h-80 overflow-hidden">
+                <img
+                  src={workshop.imageUrl}
+                  alt={workshop.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="px-6 py-8">
+              <div className="flex justify-between items-start mb-4">
+                <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full font-semibold">
+                  {workshop.category}
+                </span>
+                <div className="text-right">
+                  {workshop.price ? (
+                    <div className="text-3xl font-bold text-green-600">
+                      {formatCurrency(workshop.price)}
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold text-green-600">
+                      Free
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                {workshop.title}
+              </h1>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center text-gray-600">
+                  <MapPin className="h-5 w-5 mr-3" />
+                  <span>{workshop.location}</span>
+                </div>
+
+                {workshop.startDate && (
+                  <div className="flex items-center text-gray-600">
+                    <Calendar className="h-5 w-5 mr-3" />
+                    <span>{formatDate(workshop.startDate)}</span>
+                  </div>
+                )}
+
+                {workshop.capacity && (
+                  <div className="flex items-center text-gray-600">
+                    <Users className="h-5 w-5 mr-3" />
+                    <span>Max {workshop.capacity} students</span>
+                  </div>
+                )}
+
+                <div className="flex items-center text-gray-600">
+                  <Clock className="h-5 w-5 mr-3" />
+                  <span className="capitalize">{workshop.scheduleType} schedule</span>
+                </div>
+              </div>
+
+              {/* Apply Button */}
+              {user && user.role === 'student' && !showApplicationForm && (
+                <Button
+                  size="lg"
+                  onClick={() => setShowApplicationForm(true)}
+                  className="w-full md:w-auto"
+                >
+                  Apply for this Workshop
+                </Button>
+              )}
+
+              {!user && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-blue-800 mb-3">
+                    You need to sign in to apply for this workshop.
+                  </p>
+                  <div className="space-x-3">
+                    <Link href="/auth/login">
+                      <Button size="sm">Sign In</Button>
+                    </Link>
+                    <Link href="/auth/register">
+                      <Button variant="outline" size="sm">Create Account</Button>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {user && user.role !== 'student' && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-gray-600">
+                    Only students can apply for workshops.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Workshop Description */}
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
+            <div className="px-6 py-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                About This Workshop
+              </h2>
+              <div className="prose max-w-none text-gray-700">
+                <p className="text-lg leading-relaxed">
+                  {workshop.description}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Application Form */}
+          {showApplicationForm && user && user.role === 'student' && (
+            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div className="px-6 py-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Application Form
+                  </h2>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowApplicationForm(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+
+                <ApplicationForm
+                  workshop={workshop}
+                  onSuccess={() => {
+                    setShowApplicationForm(false);
+                    // Could show success message or redirect
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Workshop Requirements/Info */}
+          {workshop.applicationForm && workshop.applicationForm.length > 0 && !showApplicationForm && (
+            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div className="px-6 py-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Application Requirements
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  You'll need to provide the following information when applying:
+                </p>
+                <div className="space-y-3">
+                  {workshop.applicationForm.map((field, index) => (
+                    <div key={field.id} className="flex items-center">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      <span className="text-gray-700">
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
