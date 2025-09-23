@@ -40,7 +40,8 @@ export function LoginForm() {
       const { user } = await authService.login(data.email, data.password);
       setUser(user);
 
-      switch (user.role) {
+      if (user) {
+        switch (user.role) {
         case 'admin':
           router.push('/admin');
           break;
@@ -50,6 +51,7 @@ export function LoginForm() {
         case 'student':
           router.push('/student/dashboard');
           break;
+        }
       }
     } catch {
       setError('Invalid email or password');

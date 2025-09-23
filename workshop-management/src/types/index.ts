@@ -29,6 +29,7 @@ export interface Workshop {
   location: string;
   price?: number;
   capacity?: number;
+  scheduleType?: 'fixed' | 'flexible';
   startDate?: string;
   endDate?: string;
   applicationForm: FormField[];

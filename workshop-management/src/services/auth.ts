@@ -1,6 +1,7 @@
 import { account, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID } from 'appwrite';
 import { User } from '@/types';
+import { safeParseUser } from '@/lib/type-guards';
 
 export class AuthService {
   async login(email: string, password: string) {
@@ -63,18 +64,11 @@ export class AuthService {
         []
       );
 
-      const user = users.documents.find(doc => doc.email === account_user.email);
+      const userDoc = users.documents.find(doc => doc.email === account_user.email);
 
-      if (!user) return null;
+      if (!userDoc) return null;
 
-      return {
-        $id: user.$id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        profile: user.profile || {},
-        $createdAt: user.$createdAt
-      };
+      return safeParseUser(userDoc as Record<string, unknown>);
     } catch {
       return null;
     }

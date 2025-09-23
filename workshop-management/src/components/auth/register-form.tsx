@@ -43,21 +43,26 @@ export function RegisterForm() {
     setError('');
 
     try {
-      const { user } = await authService.register(
+      await authService.register(
         data.email,
         data.password,
         data.name,
         data.role
       );
+
+      // Get the current user after registration
+      const user = await authService.getCurrentUser();
       setUser(user);
 
-      switch (user.role) {
+      if (user) {
+        switch (user.role) {
         case 'master':
           router.push('/master/dashboard');
           break;
         case 'student':
           router.push('/student/dashboard');
           break;
+        }
       }
     } catch {
       setError('Registration failed. Please try again.');

@@ -1,6 +1,7 @@
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID, Query } from 'appwrite';
 import { Workshop } from '@/types';
+import { safeParseWorkshop, removeUndefinedValues } from '@/lib/type-guards';
 
 export class WorkshopService {
   async createWorkshop(data: Omit<Workshop, '$id' | '$createdAt'>) {
@@ -11,19 +12,15 @@ export class WorkshopService {
       };
 
       // Remove undefined values to avoid Appwrite errors
-      Object.keys(createData).forEach(key => {
-        if (createData[key] === undefined) {
-          delete createData[key];
-        }
-      });
+      const cleanData = removeUndefinedValues(createData);
 
-      console.log('Creating workshop with data:', createData);
+      console.log('Creating workshop with data:', cleanData);
 
       const workshop = await databases.createDocument(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         ID.unique(),
-        createData
+        cleanData
       );
       return workshop;
     } catch (error) {
@@ -46,7 +43,7 @@ export class WorkshopService {
       );
 
       return {
-        documents: workshops.documents.map(this.parseWorkshop),
+        documents: workshops.documents.map(doc => safeParseWorkshop(doc as Record<string, unknown>)),
         total: workshops.total
       };
     } catch {
@@ -65,7 +62,7 @@ export class WorkshopService {
         ]
       );
 
-      return workshops.documents.map(this.parseWorkshop);
+      return workshops.documents.map(doc => safeParseWorkshop(doc as Record<string, unknown>));
     } catch {
       throw new Error('Failed to fetch master workshops');
     }
@@ -79,7 +76,7 @@ export class WorkshopService {
         workshopId
       );
 
-      return this.parseWorkshop(workshop);
+      return safeParseWorkshop(workshop as Record<string, unknown>);
     } catch {
       throw new Error('Failed to fetch workshop');
     }
@@ -87,7 +84,7 @@ export class WorkshopService {
 
   async updateWorkshop(workshopId: string, data: Partial<Workshop>) {
     try {
-      const updateData = { ...data };
+      const updateData: Record<string, unknown> = { ...data };
 
       // Convert applicationForm to JSON string if present
       if (data.applicationForm) {
@@ -95,22 +92,18 @@ export class WorkshopService {
       }
 
       // Remove undefined values to avoid Appwrite errors
-      Object.keys(updateData).forEach(key => {
-        if (updateData[key] === undefined) {
-          delete updateData[key];
-        }
-      });
+      const cleanData = removeUndefinedValues(updateData);
 
-      console.log('Sending update data to Appwrite:', updateData);
+      console.log('Sending update data to Appwrite:', cleanData);
 
       const workshop = await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         workshopId,
-        updateData
+        cleanData
       );
 
-      return this.parseWorkshop(workshop);
+      return safeParseWorkshop(workshop as Record<string, unknown>);
     } catch (error) {
       console.error('Update workshop error:', error);
       throw new Error('Failed to update workshop');
@@ -146,16 +139,10 @@ export class WorkshopService {
         queries
       );
 
-      return workshops.documents.map(this.parseWorkshop);
+      return workshops.documents.map(doc => safeParseWorkshop(doc as Record<string, unknown>));
     } catch {
       throw new Error('Failed to search workshops');
     }
   }
 
-  private parseWorkshop(workshop: Record<string, unknown>): Workshop {
-    return {
-      ...(workshop as Workshop),
-      applicationForm: JSON.parse((workshop.applicationForm as string) || '[]')
-    };
-  }
 }

@@ -1,6 +1,7 @@
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID, Query } from 'appwrite';
 import { Application } from '@/types';
+import { safeParseApplication, removeUndefinedValues } from '@/lib/type-guards';
 import { WorkshopService } from './workshops';
 
 export class ApplicationService {
@@ -39,7 +40,7 @@ export class ApplicationService {
         ]
       );
 
-      return applications.documents.map(this.parseApplication);
+      return applications.documents.map(doc => safeParseApplication(doc as Record<string, unknown>));
     } catch {
       throw new Error('Failed to fetch student applications');
     }
@@ -56,7 +57,7 @@ export class ApplicationService {
         ]
       );
 
-      return applications.documents.map(this.parseApplication);
+      return applications.documents.map(doc => safeParseApplication(doc as Record<string, unknown>));
     } catch {
       throw new Error('Failed to fetch workshop applications');
     }
@@ -64,19 +65,21 @@ export class ApplicationService {
 
   async updateApplication(applicationId: string, data: Partial<Application>) {
     try {
-      const updateData = { ...data };
+      const updateData: Record<string, unknown> = { ...data };
       if (data.responses) {
         updateData.responses = JSON.stringify(data.responses);
       }
+
+      const cleanData = removeUndefinedValues(updateData);
 
       const application = await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.APPLICATIONS,
         applicationId,
-        updateData
+        cleanData
       );
 
-      return this.parseApplication(application);
+      return safeParseApplication(application as Record<string, unknown>);
     } catch {
       throw new Error('Failed to update application');
     }
@@ -102,10 +105,4 @@ export class ApplicationService {
     }
   }
 
-  private parseApplication(application: Record<string, unknown>): Application {
-    return {
-      ...(application as Application),
-      responses: JSON.parse((application.responses as string) || '{}')
-    };
-  }
 }
