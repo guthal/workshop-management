@@ -23,7 +23,7 @@ export class ApplicationService {
         }
       );
       return application;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to create application');
     }
   }
@@ -40,7 +40,7 @@ export class ApplicationService {
       );
 
       return applications.documents.map(this.parseApplication);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch student applications');
     }
   }
@@ -57,7 +57,7 @@ export class ApplicationService {
       );
 
       return applications.documents.map(this.parseApplication);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch workshop applications');
     }
   }
@@ -77,7 +77,7 @@ export class ApplicationService {
       );
 
       return this.parseApplication(application);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to update application');
     }
   }
@@ -97,15 +97,15 @@ export class ApplicationService {
         COLLECTIONS.APPLICATIONS,
         applicationId
       );
-    } catch (error) {
+    } catch {
       throw new Error('Failed to delete application');
     }
   }
 
-  private parseApplication(application: any): Application {
+  private parseApplication(application: Record<string, unknown>): Application {
     return {
-      ...application,
-      responses: JSON.parse(application.responses || '{}')
+      ...(application as Application),
+      responses: JSON.parse((application.responses as string) || '{}')
     };
   }
 }

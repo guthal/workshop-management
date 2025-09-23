@@ -250,7 +250,7 @@ export default function WorkshopDetailPage() {
                   Application Requirements
                 </h2>
                 <p className="text-gray-600 mb-4">
-                  You'll need to provide the following information when applying:
+                  You&apos;ll need to provide the following information when applying:
                 </p>
                 <div className="space-y-3">
                   {workshop.applicationForm.map((field, index) => (

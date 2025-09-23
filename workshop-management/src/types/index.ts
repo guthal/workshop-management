@@ -45,7 +45,7 @@ export interface Application {
   $id: string;
   workshopId: string;
   studentId: string;
-  responses: Record<string, any>;
+  responses: Record<string, unknown>;
   status: 'pending' | 'approved' | 'rejected';
   $createdAt: string;
   workshop?: Workshop;

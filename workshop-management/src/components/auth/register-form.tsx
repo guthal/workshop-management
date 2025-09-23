@@ -59,7 +59,7 @@ export function RegisterForm() {
           router.push('/student/dashboard');
           break;
       }
-    } catch (error) {
+    } catch {
       setError('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);

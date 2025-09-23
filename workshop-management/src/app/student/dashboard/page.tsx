@@ -181,7 +181,7 @@ export default function StudentDashboard() {
                   No applications yet
                 </h3>
                 <p className="text-gray-500 mb-4">
-                  You haven't applied to any workshops yet. Start exploring!
+                  You haven&apos;t applied to any workshops yet. Start exploring!
                 </p>
                 <Link href="/workshops">
                   <Button>Browse Workshops</Button>
@@ -218,7 +218,7 @@ export default function StudentDashboard() {
                             <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-md">
                               <p className="text-sm text-green-800">
                                 🎉 Congratulations! Your application has been approved.
-                                You'll receive further instructions from the workshop master.
+                                You&apos;ll receive further instructions from the workshop master.
                               </p>
                             </div>
                           )}
@@ -227,7 +227,7 @@ export default function StudentDashboard() {
                             <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
                               <p className="text-sm text-red-800">
                                 Unfortunately, your application was not approved this time.
-                                Don't give up - keep applying to other workshops!
+                                Don&apos;t give up - keep applying to other workshops!
                               </p>
                             </div>
                           )}
@@ -244,7 +244,7 @@ export default function StudentDashboard() {
           {applications.length > 0 && (
             <div className="mt-8 bg-blue-50 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                What's next?
+                What&apos;s next?
               </h3>
               <div className="text-blue-700 space-y-2">
                 <p>• Check back regularly for application status updates</p>

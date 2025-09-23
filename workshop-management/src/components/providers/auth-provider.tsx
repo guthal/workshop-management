@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const user = await authService.getCurrentUser();
         setUser(user);
-      } catch (error) {
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);

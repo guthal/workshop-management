@@ -51,7 +51,7 @@ export function LoginForm() {
           router.push('/student/dashboard');
           break;
       }
-    } catch (error) {
+    } catch {
       setError('Invalid email or password');
     } finally {
       setIsLoading(false);

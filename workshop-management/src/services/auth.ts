@@ -1,5 +1,5 @@
 import { account, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { ID, Models } from 'appwrite';
+import { ID } from 'appwrite';
 import { User } from '@/types';
 
 export class AuthService {
@@ -8,7 +8,7 @@ export class AuthService {
       const session = await account.createEmailPasswordSession(email, password);
       const user = await this.getCurrentUser();
       return { session, user };
-    } catch (error) {
+    } catch {
       throw new Error('Login failed');
     }
   }
@@ -18,7 +18,7 @@ export class AuthService {
       // First, logout any existing session
       try {
         await account.deleteSession('current');
-      } catch (error) {
+      } catch {
         // No active session, continue
       }
 
@@ -42,14 +42,14 @@ export class AuthService {
       );
 
       return { account: account_user, user };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error);
 
-      if (error.code === 409) {
+      if ((error as { code?: number }).code === 409) {
         throw new Error('An account with this email already exists. Please try logging in instead.');
       }
 
-      throw new Error(`Registration failed: ${error.message || 'Unknown error'}`);
+      throw new Error(`Registration failed: ${(error as Error).message || 'Unknown error'}`);
     }
   }
 
@@ -75,7 +75,7 @@ export class AuthService {
         profile: user.profile || {},
         $createdAt: user.$createdAt
       };
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -83,7 +83,7 @@ export class AuthService {
   async logout() {
     try {
       await account.deleteSession('current');
-    } catch (error) {
+    } catch {
       throw new Error('Logout failed');
     }
   }
@@ -97,7 +97,7 @@ export class AuthService {
         data
       );
       return updatedUser;
-    } catch (error) {
+    } catch {
       throw new Error('Profile update failed');
     }
   }

@@ -30,7 +30,7 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
     watch
   } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     if (!user) return;
 
     setIsSubmitting(true);
@@ -46,7 +46,7 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
       });
 
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to submit application:', error);
       setSubmitError('Failed to submit application. Please try again.');
     } finally {

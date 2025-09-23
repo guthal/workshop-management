@@ -1,6 +1,6 @@
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID, Query } from 'appwrite';
-import { Workshop, FormField } from '@/types';
+import { Workshop } from '@/types';
 
 export class WorkshopService {
   async createWorkshop(data: Omit<Workshop, '$id' | '$createdAt'>) {
@@ -49,7 +49,7 @@ export class WorkshopService {
         documents: workshops.documents.map(this.parseWorkshop),
         total: workshops.total
       };
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch workshops');
     }
   }
@@ -66,7 +66,7 @@ export class WorkshopService {
       );
 
       return workshops.documents.map(this.parseWorkshop);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch master workshops');
     }
   }
@@ -80,7 +80,7 @@ export class WorkshopService {
       );
 
       return this.parseWorkshop(workshop);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch workshop');
     }
   }
@@ -124,7 +124,7 @@ export class WorkshopService {
         COLLECTIONS.WORKSHOPS,
         workshopId
       );
-    } catch (error) {
+    } catch {
       throw new Error('Failed to delete workshop');
     }
   }
@@ -147,15 +147,15 @@ export class WorkshopService {
       );
 
       return workshops.documents.map(this.parseWorkshop);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to search workshops');
     }
   }
 
-  private parseWorkshop(workshop: any): Workshop {
+  private parseWorkshop(workshop: Record<string, unknown>): Workshop {
     return {
-      ...workshop,
-      applicationForm: JSON.parse(workshop.applicationForm || '[]')
+      ...(workshop as Workshop),
+      applicationForm: JSON.parse((workshop.applicationForm as string) || '[]')
     };
   }
 }
