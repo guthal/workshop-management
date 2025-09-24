@@ -61,16 +61,27 @@ export default function EditWorkshop() {
 
   useEffect(() => {
     const fetchWorkshop = async () => {
-      if (!user || !workshopId) return;
+      if (!user || !workshopId) {
+        console.log('Missing user or workshopId:', { user: !!user, workshopId });
+        return;
+      }
 
       try {
+        console.log('Fetching workshop with ID:', workshopId);
         const workshopData = await workshopService.getWorkshop(workshopId);
+        console.log('Workshop data received:', workshopData);
+        console.log('User ID:', user.$id);
+        console.log('Workshop master ID:', workshopData.masterId);
 
         // Check if user owns this workshop
         if (workshopData.masterId !== user.$id) {
+          console.log('Ownership check failed - redirecting to dashboard');
+          alert('You do not own this workshop. Redirecting to dashboard.');
           router.push('/master/dashboard');
           return;
         }
+
+        console.log('Ownership check passed');
 
         console.log('Workshop data received:', workshopData);
         console.log('Start date from DB:', workshopData.startDate);
@@ -125,6 +136,7 @@ export default function EditWorkshop() {
         setValue('autoApprove', workshopData.autoApprove || false);
       } catch (error) {
         console.error('Failed to fetch workshop:', error);
+        alert(`Failed to fetch workshop: ${error instanceof Error ? error.message : 'Unknown error'}`);
         router.push('/master/dashboard');
       } finally {
         setIsLoading(false);
