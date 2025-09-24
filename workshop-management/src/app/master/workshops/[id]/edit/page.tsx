@@ -34,9 +34,14 @@ type WorkshopForm = z.infer<typeof workshopSchema>;
 const workshopService = new WorkshopService();
 
 export default function EditWorkshop() {
+  console.log('🎯 EditWorkshop component is mounting');
+
   const { user } = useAuthStore();
   const params = useParams();
   const router = useRouter();
+
+  console.log('🎯 EditWorkshop - user:', user);
+  console.log('🎯 EditWorkshop - params:', params);
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -147,6 +152,7 @@ export default function EditWorkshop() {
   }, [user, workshopId, router, setValue]);
 
   if (!user || user.role !== 'master') {
+    console.log('🚨 Access denied - user:', user, 'role:', user?.role);
     return <div>Access denied</div>;
   }
 
