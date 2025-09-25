@@ -408,16 +408,19 @@ export default function EditWorkshop() {
                       value={watch('formColor') || '#3B82F6'}
                       onChange={(e) => {
                         const value = e.target.value;
+                        console.log('🎨 Color picker changed to:', value);
                         setValue('formColor', value, { shouldValidate: true });
                       }}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
-                    <Input
+                    <input
+                      type="text"
                       value={watch('formColor') || '#3B82F6'}
                       placeholder="#3B82F6"
-                      className="flex-1"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       onChange={(e) => {
                         const value = e.target.value;
+                        console.log('🎨 Text input changed to:', value);
                         setValue('formColor', value, { shouldValidate: true });
                       }}
                     />
