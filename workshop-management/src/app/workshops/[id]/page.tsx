@@ -31,41 +31,30 @@ export default function WorkshopDetailPage() {
 
   const workshopId = params.id as string;
 
-  console.log('🎯 WorkshopDetailPage - user:', user);
-  console.log('🎯 WorkshopDetailPage - authLoading:', authLoading);
-  console.log('🎯 WorkshopDetailPage - workshopId:', workshopId);
 
   useEffect(() => {
     const fetchWorkshop = async () => {
       if (!workshopId) {
-        console.log('🔍 No workshop ID provided');
         setIsLoading(false);
         return;
       }
 
-      console.log('🔍 Fetching workshop with ID:', workshopId);
-
       try {
         const workshopData = await workshopService.getWorkshop(workshopId);
-        console.log('🔍 Workshop data received:', workshopData);
-        console.log('🔍 Workshop status:', workshopData.status);
 
         // Only show published workshops to students
         if (workshopData.status !== 'published') {
-          console.log('🔍 Workshop is not published, redirecting...');
           alert('This workshop is not available for viewing.');
           router.push('/workshops');
           return;
         }
 
-        console.log('🔍 Workshop is published, setting workshop data');
         setWorkshop(workshopData);
       } catch (error) {
-        console.error('🚨 Failed to fetch workshop:', error);
+        console.error('Failed to fetch workshop:', error);
         alert(`Failed to load workshop: ${error instanceof Error ? error.message : 'Unknown error'}`);
         router.push('/workshops');
       } finally {
-        console.log('🔍 Setting loading to false');
         setIsLoading(false);
       }
     };
