@@ -123,6 +123,9 @@ export default function CreateWorkshop() {
         status: 'draft' as const,
       };
 
+      console.log('🎨 Form data.formColor:', data.formColor);
+      console.log('🎨 Final workshopData.formColor:', workshopData.formColor);
+
       await workshopService.createWorkshop(workshopData);
       router.push('/master/dashboard');
     } catch (error) {
@@ -281,14 +284,22 @@ export default function CreateWorkshop() {
                   </label>
                   <div className="flex items-center space-x-2">
                     <input
-                      {...register('formColor')}
                       type="color"
+                      value={watch('formColor') || '#3B82F6'}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setValue('formColor', value, { shouldValidate: true });
+                      }}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <Input
                       {...register('formColor')}
                       placeholder="#3B82F6"
                       className="flex-1"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setValue('formColor', value, { shouldValidate: true });
+                      }}
                     />
                   </div>
                 </div>
