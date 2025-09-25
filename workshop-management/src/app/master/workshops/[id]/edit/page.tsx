@@ -402,6 +402,9 @@ export default function EditWorkshop() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Form Color Theme
                   </label>
+                  <div className="mb-2 text-sm text-gray-600">
+                    Current value: <strong>{watch('formColor') || '#3B82F6'}</strong>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -409,6 +412,7 @@ export default function EditWorkshop() {
                       onChange={(e) => {
                         const value = e.target.value;
                         console.log('🎨 Color picker changed to:', value);
+                        alert(`Color picker changed to: ${value}`);
                         setValue('formColor', value, { shouldValidate: true });
                       }}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
