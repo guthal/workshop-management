@@ -1,4 +1,4 @@
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, publicDatabases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID, Query } from 'appwrite';
 import { Workshop } from '@/types';
 import { safeParseWorkshop, removeUndefinedValues } from '@/lib/type-guards';
@@ -31,7 +31,7 @@ export class WorkshopService {
 
   async getWorkshops(limit = 25, offset = 0) {
     try {
-      const workshops = await databases.listDocuments(
+      const workshops = await publicDatabases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         [
@@ -72,7 +72,7 @@ export class WorkshopService {
     try {
       console.log('📍 WorkshopService.getWorkshop - Fetching workshop:', workshopId);
 
-      const workshop = await databases.getDocument(
+      const workshop = await publicDatabases.getDocument(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         workshopId
@@ -142,7 +142,7 @@ export class WorkshopService {
         queries.push(Query.equal('category', category));
       }
 
-      const workshops = await databases.listDocuments(
+      const workshops = await publicDatabases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         queries
