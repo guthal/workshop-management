@@ -136,7 +136,13 @@ export default function WorkshopDetailPage() {
             )}
             <div className="px-6 py-8">
               <div className="flex justify-between items-start mb-4">
-                <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full font-semibold">
+                <span
+                  className="inline-block text-sm px-3 py-1 rounded-full font-semibold"
+                  style={{
+                    backgroundColor: workshop.formColor ? `${workshop.formColor}20` : '#3B82F620',
+                    color: workshop.formColor || '#3B82F6'
+                  }}
+                >
                   {workshop.category}
                 </span>
                 <div className="text-right">
@@ -188,22 +194,52 @@ export default function WorkshopDetailPage() {
                   size="lg"
                   onClick={() => setShowApplicationForm(true)}
                   className="w-full md:w-auto"
+                  style={{
+                    backgroundColor: workshop.formColor || '#3B82F6',
+                    borderColor: workshop.formColor || '#3B82F6'
+                  }}
                 >
                   Apply for this Workshop
                 </Button>
               )}
 
               {!user && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-blue-800 mb-3">
+                <div
+                  className="border rounded-lg p-4"
+                  style={{
+                    backgroundColor: workshop.formColor ? `${workshop.formColor}10` : '#3B82F610',
+                    borderColor: workshop.formColor ? `${workshop.formColor}40` : '#3B82F640'
+                  }}
+                >
+                  <p
+                    className="mb-3 font-medium"
+                    style={{ color: workshop.formColor || '#3B82F6' }}
+                  >
                     You need to sign in to apply for this workshop.
                   </p>
                   <div className="space-x-3">
                     <Link href="/auth/login">
-                      <Button size="sm">Sign In</Button>
+                      <Button
+                        size="sm"
+                        style={{
+                          backgroundColor: workshop.formColor || '#3B82F6',
+                          borderColor: workshop.formColor || '#3B82F6'
+                        }}
+                      >
+                        Sign In
+                      </Button>
                     </Link>
                     <Link href="/auth/register">
-                      <Button variant="outline" size="sm">Create Account</Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        style={{
+                          borderColor: workshop.formColor || '#3B82F6',
+                          color: workshop.formColor || '#3B82F6'
+                        }}
+                      >
+                        Create Account
+                      </Button>
                     </Link>
                   </div>
                 </div>
