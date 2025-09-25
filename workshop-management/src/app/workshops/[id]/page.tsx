@@ -22,7 +22,7 @@ import {
 const workshopService = new WorkshopService();
 
 export default function WorkshopDetailPage() {
-  const { user } = useAuthStore();
+  const { user, isLoading: authLoading } = useAuthStore();
   const params = useParams();
   const router = useRouter();
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
@@ -30,6 +30,10 @@ export default function WorkshopDetailPage() {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
 
   const workshopId = params.id as string;
+
+  console.log('🎯 WorkshopDetailPage - user:', user);
+  console.log('🎯 WorkshopDetailPage - authLoading:', authLoading);
+  console.log('🎯 WorkshopDetailPage - workshopId:', workshopId);
 
   useEffect(() => {
     const fetchWorkshop = async () => {
@@ -66,6 +70,7 @@ export default function WorkshopDetailPage() {
       }
     };
 
+    // Fetch workshop immediately, don't wait for auth
     fetchWorkshop();
   }, [workshopId, router]);
 
