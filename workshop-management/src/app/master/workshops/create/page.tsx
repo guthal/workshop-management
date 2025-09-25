@@ -293,7 +293,7 @@ export default function CreateWorkshop() {
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <Input
-                      {...register('formColor')}
+                      value={watch('formColor') || '#3B82F6'}
                       placeholder="#3B82F6"
                       className="flex-1"
                       onChange={(e) => {

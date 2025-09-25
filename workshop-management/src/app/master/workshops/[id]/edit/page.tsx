@@ -75,6 +75,7 @@ export default function EditWorkshop() {
         console.log('Fetching workshop with ID:', workshopId);
         const workshopData = await workshopService.getWorkshop(workshopId);
         console.log('Workshop data received:', workshopData);
+        console.log('🎨 Loaded workshop formColor from DB:', workshopData.formColor);
         console.log('User ID:', user.$id);
         console.log('Workshop master ID:', workshopData.masterId);
 
@@ -412,7 +413,7 @@ export default function EditWorkshop() {
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <Input
-                      {...register('formColor')}
+                      value={watch('formColor') || '#3B82F6'}
                       placeholder="#3B82F6"
                       className="flex-1"
                       onChange={(e) => {
