@@ -70,14 +70,23 @@ export class WorkshopService {
 
   async getWorkshop(workshopId: string) {
     try {
+      console.log('📍 WorkshopService.getWorkshop - Fetching workshop:', workshopId);
+
       const workshop = await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.WORKSHOPS,
         workshopId
       );
 
-      return safeParseWorkshop(workshop as Record<string, unknown>);
-    } catch {
+      console.log('📍 WorkshopService.getWorkshop - Raw workshop data:', workshop);
+      console.log('📍 WorkshopService.getWorkshop - Workshop status:', workshop.status);
+
+      const parsed = safeParseWorkshop(workshop as Record<string, unknown>);
+      console.log('📍 WorkshopService.getWorkshop - Parsed workshop:', parsed);
+
+      return parsed;
+    } catch (error) {
+      console.error('📍 WorkshopService.getWorkshop - Error:', error);
       throw new Error('Failed to fetch workshop');
     }
   }
