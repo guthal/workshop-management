@@ -80,25 +80,34 @@ export default function CreateWorkshop() {
   };
 
   const uploadImage = async (): Promise<string | undefined> => {
-    if (!workshopImage) return undefined;
+    if (!workshopImage) {
+      console.log('🖼️ No workshop image selected, skipping upload');
+      return undefined;
+    }
 
-    console.log('Starting image upload...', workshopImage.name, workshopImage.type);
+    console.log('🖼️ Starting image upload...', workshopImage.name, workshopImage.type);
     setUploadingImage(true);
     try {
       const response = await storage.createFile(
-        'workshop-images', // We'll need to create this bucket
+        'workshop-images',
         ID.unique(),
         workshopImage,
-        ['read("any")'] // Allow anyone to read the image
+        ['read("any")']
       );
 
-      const imageUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/workshop-images/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`;
-      console.log('Image uploaded successfully:', imageUrl);
+      console.log('🖼️ Storage response:', response);
 
-      // Return the file URL
+      const imageUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/workshop-images/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`;
+      console.log('🖼️ Generated image URL:', imageUrl);
+      console.log('🖼️ Environment variables:', {
+        endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+        project: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
+      });
+
       return imageUrl;
     } catch (error) {
-      console.error('Failed to upload image:', error);
+      console.error('🖼️ Failed to upload image:', error);
+      console.error('🖼️ Error details:', JSON.stringify(error, null, 2));
       return undefined;
     } finally {
       setUploadingImage(false);
@@ -129,8 +138,11 @@ export default function CreateWorkshop() {
         status: 'draft' as const,
       };
 
+      console.log('🖼️ Image upload result:', imageUrl);
+      console.log('🖼️ Workshop image state:', workshopImage);
       console.log('🎨 Form data.formColor:', data.formColor);
       console.log('🎨 Final workshopData.formColor:', workshopData.formColor);
+      console.log('🖼️ Final workshopData.imageUrl:', workshopData.imageUrl);
 
       await workshopService.createWorkshop(workshopData);
       router.push('/master/dashboard');

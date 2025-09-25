@@ -196,24 +196,30 @@ export default function EditWorkshop() {
   };
 
   const uploadImage = async (): Promise<string | undefined> => {
-    if (!workshopImage) return workshop.imageUrl;
+    if (!workshopImage) {
+      console.log('🖼️ No new image selected, keeping existing:', workshop.imageUrl);
+      return workshop.imageUrl;
+    }
 
-    console.log('Starting image upload for edit...', workshopImage.name, workshopImage.type);
+    console.log('🖼️ Starting image upload for edit...', workshopImage.name, workshopImage.type);
     setUploadingImage(true);
     try {
       const response = await storage.createFile(
         'workshop-images',
         ID.unique(),
         workshopImage,
-        ['read("any")'] // Allow anyone to read the image
+        ['read("any")']
       );
 
+      console.log('🖼️ Storage response (edit):', response);
+
       const imageUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/workshop-images/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`;
-      console.log('Image uploaded successfully for edit:', imageUrl);
+      console.log('🖼️ Generated image URL (edit):', imageUrl);
 
       return imageUrl;
     } catch (error) {
-      console.error('Failed to upload image in edit:', error);
+      console.error('🖼️ Failed to upload image in edit:', error);
+      console.error('🖼️ Edit error details:', JSON.stringify(error, null, 2));
       return workshop.imageUrl;
     } finally {
       setUploadingImage(false);
@@ -243,9 +249,11 @@ export default function EditWorkshop() {
       };
 
       console.log('Updating workshop with data:', workshopData);
-      console.log('Image URL in update:', imageUrl);
+      console.log('🖼️ Image upload result (edit):', imageUrl);
+      console.log('🖼️ Workshop image state (edit):', workshopImage);
       console.log('🎨 Form data.formColor:', data.formColor);
       console.log('🎨 Final workshopData.formColor:', workshopData.formColor);
+      console.log('🖼️ Final workshopData.imageUrl (edit):', workshopData.imageUrl);
       await workshopService.updateWorkshop(workshop.$id, workshopData);
       router.push(`/master/workshops/${workshop.$id}`);
     } catch (error) {
