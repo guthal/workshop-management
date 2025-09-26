@@ -400,8 +400,13 @@ export default function EditWorkshop() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   {imagePreview && (
-                    <div className="mt-2">
-                      <img src={imagePreview} alt="Workshop preview" className="max-h-32 max-w-48 object-contain rounded-md border" />
+                    <div className="mt-2 flex justify-start">
+                      <img
+                        src={imagePreview}
+                        alt="Workshop preview"
+                        className="max-h-32 max-w-full object-contain rounded-md border border-gray-300 shadow-sm"
+                        style={{ height: 'auto', width: 'auto' }}
+                      />
                     </div>
                   )}
                 </div>

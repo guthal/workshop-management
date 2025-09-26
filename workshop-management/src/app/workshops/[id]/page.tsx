@@ -115,11 +115,12 @@ export default function WorkshopDetailPage() {
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
             {/* Workshop Image */}
             {workshop.imageUrl && (
-              <div className="w-full">
+              <div className="w-full flex justify-center bg-gray-50">
                 <img
                   src={workshop.imageUrl}
                   alt={workshop.title}
-                  className="w-full h-auto object-contain max-h-96"
+                  className="max-w-full max-h-80 md:max-h-96 object-contain"
+                  style={{ height: 'auto', width: 'auto' }}
                 />
               </div>
             )}
