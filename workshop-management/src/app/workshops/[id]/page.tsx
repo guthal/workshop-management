@@ -28,6 +28,7 @@ export default function WorkshopDetailPage() {
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const workshopId = params.id as string;
 
@@ -62,6 +63,20 @@ export default function WorkshopDetailPage() {
     // Fetch workshop immediately, don't wait for auth
     fetchWorkshop();
   }, [workshopId, router]);
+
+  // Handle keyboard events for image modal
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowImageModal(false);
+      }
+    };
+
+    if (showImageModal) {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => document.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [showImageModal]);
 
   if (isLoading) {
     return (
@@ -115,13 +130,19 @@ export default function WorkshopDetailPage() {
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
             {/* Workshop Image */}
             {workshop.imageUrl && (
-              <div className="w-full flex justify-center bg-gray-50">
+              <div className="w-full flex justify-center bg-gray-50 relative group">
                 <img
                   src={workshop.imageUrl}
                   alt={workshop.title}
-                  className="max-w-full max-h-80 md:max-h-96 object-contain"
+                  className="max-w-full max-h-80 md:max-h-96 object-contain cursor-pointer transition-opacity hover:opacity-90"
                   style={{ height: 'auto', width: 'auto' }}
+                  onClick={() => setShowImageModal(true)}
                 />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 pointer-events-none">
+                  <div className="bg-white bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
+                    Click to enlarge
+                  </div>
+                </div>
               </div>
             )}
             <div className="px-6 py-8">
@@ -312,6 +333,41 @@ export default function WorkshopDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Image Modal */}
+      {showImageModal && workshop?.imageUrl && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowImageModal(false)}
+        >
+          <div className="relative max-w-full max-h-full">
+            <img
+              src={workshop.imageUrl}
+              alt={workshop.title}
+              className="max-w-full max-h-full object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 transition-all"
+            >
+              <svg
+                className="w-6 h-6 text-gray-800"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
