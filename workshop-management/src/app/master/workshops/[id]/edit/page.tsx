@@ -393,6 +393,15 @@ export default function EditWorkshop() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Workshop Image
                   </label>
+                  <div className="mb-2 text-sm text-gray-600 bg-blue-50 p-3 rounded-md border border-blue-200">
+                    <div className="font-medium text-blue-800 mb-1">📐 Recommended Image Specifications:</div>
+                    <ul className="text-blue-700 space-y-1">
+                      <li>• <strong>Dimensions:</strong> 1200×675px (16:9 aspect ratio)</li>
+                      <li>• <strong>File Size:</strong> Under 1MB for fast loading</li>
+                      <li>• <strong>Format:</strong> JPG or PNG</li>
+                      <li>• <strong>Quality:</strong> High resolution for best display</li>
+                    </ul>
+                  </div>
                   <input
                     type="file"
                     accept="image/*"
