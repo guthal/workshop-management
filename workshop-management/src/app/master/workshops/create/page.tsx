@@ -291,7 +291,7 @@ export default function CreateWorkshop() {
                   />
                   {imagePreview && (
                     <div className="mt-2">
-                      <img src={imagePreview} alt="Workshop preview" className="h-32 w-48 object-cover rounded-md" />
+                      <img src={imagePreview} alt="Workshop preview" className="max-h-32 max-w-48 object-contain rounded-md border" />
                     </div>
                   )}
                 </div>

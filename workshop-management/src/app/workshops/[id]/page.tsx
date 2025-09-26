@@ -115,11 +115,11 @@ export default function WorkshopDetailPage() {
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
             {/* Workshop Image */}
             {workshop.imageUrl && (
-              <div className="w-full h-64 md:h-80 overflow-hidden">
+              <div className="w-full">
                 <img
                   src={workshop.imageUrl}
                   alt={workshop.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain max-h-96"
                 />
               </div>
             )}
