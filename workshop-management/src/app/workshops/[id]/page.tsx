@@ -135,20 +135,26 @@ export default function WorkshopDetailPage() {
           <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-8">
             {/* Workshop Image */}
             {workshop.imageUrl && (
-              <div className="w-full flex justify-center bg-gray-50 relative group">
-                <img
-                  src={workshop.imageUrl}
-                  alt={workshop.title}
-                  className="max-w-full max-h-80 md:max-h-96 object-contain cursor-pointer transition-opacity hover:opacity-90"
-                  style={{ height: 'auto', width: 'auto' }}
-                  onClick={() => {
-                    console.log('🖼️ Image clicked, opening modal');
+              <div className="w-full flex justify-center bg-gray-50 relative">
+                <div
+                  className="relative group cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🖼️ Image container clicked, opening modal');
                     setShowImageModal(true);
                   }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 pointer-events-none">
-                  <div className="bg-white bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
-                    Click to enlarge
+                >
+                  <img
+                    src={workshop.imageUrl}
+                    alt={workshop.title}
+                    className="max-w-full max-h-80 md:max-h-96 object-contain transition-opacity hover:opacity-90"
+                    style={{ height: 'auto', width: 'auto' }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20">
+                    <div className="bg-white bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium text-gray-800 pointer-events-none">
+                      Click to enlarge
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,9 +168,18 @@ export default function WorkshopDetailPage() {
                     console.log('🖼️ Test button clicked');
                     setShowImageModal(true);
                   }}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded text-sm"
+                  className="px-3 py-1 bg-yellow-500 text-white rounded text-sm mr-2"
                 >
                   🧪 Test Modal (Debug)
+                </button>
+                <button
+                  onClick={() => {
+                    console.log('🖼️ Simple click test worked!');
+                    alert('Click handler is working!');
+                  }}
+                  className="px-3 py-1 bg-green-500 text-white rounded text-sm"
+                >
+                  ✅ Test Click
                 </button>
               </div>
             )}
