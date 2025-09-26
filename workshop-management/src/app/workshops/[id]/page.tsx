@@ -30,6 +30,11 @@ export default function WorkshopDetailPage() {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
+  // Debug modal state changes
+  useEffect(() => {
+    console.log('🖼️ Modal state changed:', showImageModal);
+  }, [showImageModal]);
+
   const workshopId = params.id as string;
 
 
@@ -136,7 +141,10 @@ export default function WorkshopDetailPage() {
                   alt={workshop.title}
                   className="max-w-full max-h-80 md:max-h-96 object-contain cursor-pointer transition-opacity hover:opacity-90"
                   style={{ height: 'auto', width: 'auto' }}
-                  onClick={() => setShowImageModal(true)}
+                  onClick={() => {
+                    console.log('🖼️ Image clicked, opening modal');
+                    setShowImageModal(true);
+                  }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 pointer-events-none">
                   <div className="bg-white bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
@@ -145,6 +153,22 @@ export default function WorkshopDetailPage() {
                 </div>
               </div>
             )}
+
+            {/* Debug: Test modal button */}
+            {workshop?.imageUrl && (
+              <div className="px-6 py-2 bg-yellow-100 border-b">
+                <button
+                  onClick={() => {
+                    console.log('🖼️ Test button clicked');
+                    setShowImageModal(true);
+                  }}
+                  className="px-3 py-1 bg-yellow-500 text-white rounded text-sm"
+                >
+                  🧪 Test Modal (Debug)
+                </button>
+              </div>
+            )}
+
             <div className="px-6 py-8">
               <div className="flex justify-between items-start mb-4">
                 <span
@@ -335,7 +359,9 @@ export default function WorkshopDetailPage() {
       </div>
 
       {/* Image Modal */}
-      {showImageModal && workshop?.imageUrl && (
+      {showImageModal && workshop?.imageUrl && ((() => {
+        console.log('🖼️ Rendering modal with image:', workshop.imageUrl);
+        return (
         <div
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
           onClick={() => setShowImageModal(false)}
@@ -367,7 +393,8 @@ export default function WorkshopDetailPage() {
             </button>
           </div>
         </div>
-      )}
+        );
+      })())}
     </div>
   );
 }
