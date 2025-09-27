@@ -43,11 +43,6 @@ export default function CreateWorkshop() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Debug: Check if component is rendering
-  useEffect(() => {
-    console.log('🎨 CreateWorkshop component mounted');
-    console.log('🎨 Current formColor value:', watch('formColor'));
-  }, [watch]);
 
   const {
     register,
@@ -138,11 +133,6 @@ export default function CreateWorkshop() {
         status: 'draft' as const,
       };
 
-      console.log('🖼️ Image upload result:', imageUrl);
-      console.log('🖼️ Workshop image state:', workshopImage);
-      console.log('🎨 Form data.formColor:', data.formColor);
-      console.log('🎨 Final workshopData.formColor:', workshopData.formColor);
-      console.log('🖼️ Final workshopData.imageUrl:', workshopData.imageUrl);
 
       await workshopService.createWorkshop(workshopData);
       router.push('/master/dashboard');
@@ -317,38 +307,13 @@ export default function CreateWorkshop() {
                   <div className="mb-2 text-sm text-gray-600">
                     Current value: <strong>{watch('formColor') || '#3B82F6'}</strong>
                   </div>
-                  <div className="mb-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        console.log('🎨 Test button clicked');
-                        alert('Test button clicked');
-                        setValue('formColor', '#FF0000', { shouldValidate: true });
-                      }}
-                      className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-                    >
-                      Test: Set Red
-                    </button>
-                  </div>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
                       value={watch('formColor') || '#3B82F6'}
-                      onInput={(e) => {
-                        const value = (e.target as HTMLInputElement).value;
-                        console.log('🎨 Color picker onInput:', value);
-                        alert(`Color picker onInput: ${value}`);
-                        setValue('formColor', value, { shouldValidate: true });
-                      }}
                       onChange={(e) => {
                         const value = e.target.value;
-                        console.log('🎨 Color picker onChange:', value);
-                        alert(`Color picker onChange: ${value}`);
                         setValue('formColor', value, { shouldValidate: true });
-                      }}
-                      onClick={() => {
-                        console.log('🎨 Color picker clicked!');
-                        alert('Color picker clicked!');
                       }}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
@@ -359,7 +324,6 @@ export default function CreateWorkshop() {
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       onChange={(e) => {
                         const value = e.target.value;
-                        console.log('🎨 Text input changed to:', value);
                         setValue('formColor', value, { shouldValidate: true });
                       }}
                     />
