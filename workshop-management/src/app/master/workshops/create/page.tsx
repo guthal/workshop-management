@@ -48,6 +48,7 @@ export default function CreateWorkshop() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<WorkshopForm>({
     resolver: zodResolver(workshopSchema),
