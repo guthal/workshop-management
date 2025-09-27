@@ -1,4 +1,12 @@
+# Workshop Management Platform
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Recent Updates
+- Added image modal/lightbox for workshop details
+- Implemented color theme customization
+- Added image upload guidelines and specifications
+- Fixed image aspect ratio display
 
 ## Getting Started
 
