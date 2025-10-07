@@ -162,7 +162,21 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
               {field.label}
               {isRequired && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+            <div
+              className="border-2 border-dashed rounded-lg p-6 text-center transition-all"
+              style={{
+                borderColor: `${formColor}40`,
+                backgroundColor: `${formColor}05`
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = formColor;
+                e.currentTarget.style.backgroundColor = `${formColor}10`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = `${formColor}40`;
+                e.currentTarget.style.backgroundColor = `${formColor}05`;
+              }}
+            >
               <input
                 {...register(fieldName, {
                   required: isRequired ? `${field.label} is required` : false
@@ -182,12 +196,12 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
                 htmlFor={`file-${field.id}`}
                 className="cursor-pointer block"
               >
-                <div className="text-gray-400 mb-2">
+                <div className="mb-2" style={{ color: formColor }}>
                   <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 font-medium">
                   Click to upload image or drag and drop
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
@@ -195,8 +209,8 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
                 </p>
               </label>
               {watch(fieldName) && (
-                <p className="text-sm text-green-600 mt-2">
-                  Selected: {watch(fieldName)}
+                <p className="text-sm font-medium mt-2" style={{ color: formColor }}>
+                  ✓ Selected: {watch(fieldName)}
                 </p>
               )}
             </div>
@@ -213,7 +227,21 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
               {field.label}
               {isRequired && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+            <div
+              className="border-2 border-dashed rounded-lg p-6 text-center transition-all"
+              style={{
+                borderColor: `${formColor}40`,
+                backgroundColor: `${formColor}05`
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = formColor;
+                e.currentTarget.style.backgroundColor = `${formColor}10`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = `${formColor}40`;
+                e.currentTarget.style.backgroundColor = `${formColor}05`;
+              }}
+            >
               <input
                 {...register(fieldName, {
                   required: isRequired ? `${field.label} is required` : false
@@ -233,12 +261,12 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
                 htmlFor={`video-${field.id}`}
                 className="cursor-pointer block"
               >
-                <div className="text-gray-400 mb-2">
+                <div className="mb-2" style={{ color: formColor }}>
                   <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 font-medium">
                   Click to upload video or drag and drop
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
@@ -246,8 +274,8 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
                 </p>
               </label>
               {watch(fieldName) && (
-                <p className="text-sm text-green-600 mt-2">
-                  Selected: {watch(fieldName)}
+                <p className="text-sm font-medium mt-2" style={{ color: formColor }}>
+                  ✓ Selected: {watch(fieldName)}
                 </p>
               )}
             </div>
@@ -263,58 +291,88 @@ export function ApplicationForm({ workshop, onSuccess }: ApplicationFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="rounded-lg p-4 mb-6" style={{
-        backgroundColor: `${formColor}10`,
-        borderWidth: '1px',
+    <div
+      className="rounded-xl p-6 md:p-8"
+      style={{
+        backgroundColor: `${formColor}08`,
+        backgroundImage: `linear-gradient(135deg, ${formColor}05 0%, ${formColor}15 100%)`,
+        borderWidth: '2px',
         borderStyle: 'solid',
-        borderColor: `${formColor}40`
-      }}>
-        <h3 className="text-lg font-semibold mb-2" style={{ color: formColor }}>
-          Application for: {workshop.title}
-        </h3>
-        <p className="text-sm" style={{ color: `${formColor}CC` }}>
-          Please fill out the form below to apply for this workshop. All required fields must be completed.
-        </p>
-      </div>
-
-      {workshop.applicationForm && workshop.applicationForm.length > 0 ? (
-        <div className="space-y-6">
-          {workshop.applicationForm.map(renderField)}
+        borderColor: `${formColor}30`
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="rounded-lg p-6 mb-6 shadow-sm" style={{
+          backgroundColor: 'white',
+          borderLeftWidth: '4px',
+          borderLeftStyle: 'solid',
+          borderLeftColor: formColor
+        }}>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: formColor }}>
+            Application for: {workshop.title}
+          </h3>
+          <p className="text-sm text-gray-600">
+            Please fill out the form below to apply for this workshop. All required fields must be completed.
+          </p>
         </div>
-      ) : (
-        <div className="text-center py-8 text-gray-500">
-          <p>No additional information required for this workshop.</p>
-        </div>
-      )}
 
-      {submitError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-700">{submitError}</p>
-        </div>
-      )}
+        {workshop.applicationForm && workshop.applicationForm.length > 0 ? (
+          <div
+            className="space-y-6 rounded-lg p-6"
+            style={{
+              backgroundColor: 'white',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            {workshop.applicationForm.map(renderField)}
+          </div>
+        ) : (
+          <div className="text-center py-8 bg-white rounded-lg shadow-sm">
+            <p className="text-gray-500">No additional information required for this workshop.</p>
+          </div>
+        )}
 
-      <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onSuccess}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          disabled={isSubmitting}
+        {submitError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-700">{submitError}</p>
+          </div>
+        )}
+
+        <div
+          className="flex justify-end space-x-3 pt-6 rounded-lg p-4"
           style={{
-            backgroundColor: formColor,
-            borderColor: formColor
+            backgroundColor: 'white',
+            borderTopWidth: '2px',
+            borderTopStyle: 'solid',
+            borderTopColor: `${formColor}20`
           }}
-          className="hover:opacity-90"
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Application'}
-        </Button>
-      </div>
-    </form>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onSuccess}
+            disabled={isSubmitting}
+            style={{
+              borderColor: `${formColor}60`,
+              color: formColor
+            }}
+            className="hover:opacity-80"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              backgroundColor: formColor,
+              borderColor: formColor
+            }}
+            className="hover:opacity-90 shadow-md"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
