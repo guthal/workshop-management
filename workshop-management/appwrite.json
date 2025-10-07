@@ -1,0 +1,300 @@
+{
+    "projectId": "68cc7fcf003a7addc1c3",
+    "projectName": "Workshop Platform",
+    "databases": [
+        {
+            "databaseId": "workshop-platform",
+            "name": "Workshop Platform Database",
+            "collections": [
+                {
+                    "collectionId": "users",
+                    "name": "Users",
+                    "documentSecurity": true,
+                    "attributes": [
+                        {
+                            "key": "email",
+                            "type": "string",
+                            "size": 255,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "name",
+                            "type": "string",
+                            "size": 255,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "role",
+                            "type": "enum",
+                            "elements": [
+                                "admin",
+                                "master",
+                                "student"
+                            ],
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "profile",
+                            "type": "string",
+                            "size": 1000,
+                            "required": false,
+                            "array": false
+                        }
+                    ],
+                    "indexes": [
+                        {
+                            "key": "email_index",
+                            "type": "unique",
+                            "attributes": [
+                                "email"
+                            ]
+                        },
+                        {
+                            "key": "role_index",
+                            "type": "key",
+                            "attributes": [
+                                "role"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "collectionId": "workshops",
+                    "name": "Workshops",
+                    "documentSecurity": true,
+                    "attributes": [
+                        {
+                            "key": "masterId",
+                            "type": "string",
+                            "size": 36,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "title",
+                            "type": "string",
+                            "size": 255,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "description",
+                            "type": "string",
+                            "size": 5000,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "category",
+                            "type": "string",
+                            "size": 100,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "location",
+                            "type": "string",
+                            "size": 255,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "price",
+                            "type": "integer",
+                            "required": false,
+                            "array": false
+                        },
+                        {
+                            "key": "capacity",
+                            "type": "integer",
+                            "required": false,
+                            "array": false
+                        },
+                        {
+                            "key": "scheduleType",
+                            "type": "enum",
+                            "elements": [
+                                "fixed",
+                                "flexible"
+                            ],
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "startDate",
+                            "type": "datetime",
+                            "required": false,
+                            "array": false
+                        },
+                        {
+                            "key": "endDate",
+                            "type": "datetime",
+                            "required": false,
+                            "array": false
+                        },
+                        {
+                            "key": "applicationForm",
+                            "type": "string",
+                            "size": 10000,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "status",
+                            "type": "enum",
+                            "elements": [
+                                "draft",
+                                "published",
+                                "cancelled"
+                            ],
+                            "required": true,
+                            "array": false
+                        }
+                    ],
+                    "indexes": [
+                        {
+                            "key": "master_index",
+                            "type": "key",
+                            "attributes": [
+                                "masterId"
+                            ]
+                        },
+                        {
+                            "key": "status_index",
+                            "type": "key",
+                            "attributes": [
+                                "status"
+                            ]
+                        },
+                        {
+                            "key": "category_index",
+                            "type": "key",
+                            "attributes": [
+                                "category"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "collectionId": "applications",
+                    "name": "Applications",
+                    "documentSecurity": true,
+                    "attributes": [
+                        {
+                            "key": "workshopId",
+                            "type": "string",
+                            "size": 36,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "studentId",
+                            "type": "string",
+                            "size": 36,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "responses",
+                            "type": "string",
+                            "size": 10000,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "status",
+                            "type": "enum",
+                            "elements": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ],
+                            "required": true,
+                            "array": false
+                        }
+                    ],
+                    "indexes": [
+                        {
+                            "key": "workshop_index",
+                            "type": "key",
+                            "attributes": [
+                                "workshopId"
+                            ]
+                        },
+                        {
+                            "key": "student_index",
+                            "type": "key",
+                            "attributes": [
+                                "studentId"
+                            ]
+                        },
+                        {
+                            "key": "status_index",
+                            "type": "key",
+                            "attributes": [
+                                "status"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "collectionId": "payments",
+                    "name": "Payments",
+                    "documentSecurity": true,
+                    "attributes": [
+                        {
+                            "key": "applicationId",
+                            "type": "string",
+                            "size": 36,
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "amount",
+                            "type": "integer",
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "status",
+                            "type": "enum",
+                            "elements": [
+                                "pending",
+                                "completed",
+                                "failed"
+                            ],
+                            "required": true,
+                            "array": false
+                        },
+                        {
+                            "key": "stripePaymentId",
+                            "type": "string",
+                            "size": 255,
+                            "required": false,
+                            "array": false
+                        }
+                    ],
+                    "indexes": [
+                        {
+                            "key": "application_index",
+                            "type": "key",
+                            "attributes": [
+                                "applicationId"
+                            ]
+                        },
+                        {
+                            "key": "status_index",
+                            "type": "key",
+                            "attributes": [
+                                "status"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
